@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { useContext } from "@nuxtjs/composition-api"
+import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { ref } from "vue";
 interface Response {
   message: String;
   user?: any;
@@ -11,24 +12,26 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     users: {
       username: "",
-      companies_id: 0
+      companies_id: 0,
     },
     token: "",
   }),
   actions: {
-    async login(user: any) {
-      const { $axios } = useContext()
-      const { data } = await $axios.post<Response>("/login", user)
-      if (data.status) {
-        this.users = data.user;
-        this.token = data.token;
-      }
-      return data;
+    async login(user: any, $axios: NuxtAxiosInstance) {
+      const response = ref();
+      await $axios.$post<Response>("/login", user).then((resp) => {
+        if (resp.status) {
+          this.users = resp.user;
+          this.token = resp.token;
+        }
+        response.value = resp;
+      });
+      return response;
     },
     logOff() {
       this.users = {
         username: "",
-        companies_id: 0
+        companies_id: 0,
       };
       this.token = "";
     },
@@ -46,5 +49,8 @@ export const useUserStore = defineStore("user", {
     getCompany(): Number {
       return this.users?.companies_id;
     },
-  }
+  },
+  persist: {
+    enabled: true,
+  },
 });

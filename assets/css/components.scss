@@ -1,0 +1,22 @@
+.p-cascadeselect-items-wrapper>ul.p-cascadeselect-panel {
+    max-height: 20em;
+    overflow-y: scroll;
+    position: inherit;
+}
+
+.p-cascadeselect-item-active>.p-cascadeselect-sublist {
+    display: block;
+    left: 205%;
+    top: 0;
+    max-height: 20em;
+    overflow-y: scroll;
+}
+
+.p-selectbutton {
+    box-shadow: none;
+}
+
+.p-selectbutton .p-button {
+    font-size: 0.875rem;
+    padding: 0.65625rem 0.875rem;
+}

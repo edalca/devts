@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>{{ v$.username.$model }}</p>
+    <p>{{ "HOLA" }}</p>
   </div>
 </template>
 
@@ -9,7 +9,6 @@ import Vue, { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 export default Vue.extend({
-  name: "IndexPage",
   layout: "app",
   setup() {
     const user = reactive({
@@ -24,7 +23,6 @@ export default Vue.extend({
     }));
 
     const v$ = useVuelidate(rules, user);
-    console.log(v$);
     return {
       user,
       v$,

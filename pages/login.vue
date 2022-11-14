@@ -2,29 +2,46 @@
   <div class="login">
     <Toast />
     <Card style="width: 400px">
-      <template #title><h1>Inicio de Sesion</h1></template>
+      <template #title>Inicio de Sesion</template>
       <template #content>
         <div class="p-fluid">
           <div class="field">
             <label for="username">Nombre de Usuario</label>
-            <InputText id="username" v-model="user.username" type="text" />
+            <InputText
+              id="username"
+              v-model="v$.username.$model"
+              type="text"
+              :class="{
+                'p-invalid': v$.username.$error,
+              }"
+            />
           </div>
           <div class="field">
             <label for="password">Contraseña</label>
-            <InputText id="password" v-model="user.password" type="password" />
+            <InputText
+              id="password"
+              v-model="v$.password.$model"
+              type="password"
+              :class="{
+                'p-invalid': v$.password.$error,
+              }"
+            />
           </div>
           <div class="field">
             <label for="company">Empresa</label>
             <Dropdown
               id="company"
-              v-model="user.companies_id"
-              :options="[]"
+              v-model="v$.companies_id.$model"
+              :options="companies"
               optionLabel="descriptionName"
               optionValue="id"
+              :class="{
+                'p-invalid': v$.companies_id.$error,
+              }"
             />
           </div>
           <div class="field">
-            <Button label="Inicio de Sesion" @click="login(false)" />
+            <Button label="Inicio de Sesion" @click="login(!v$.$invalid)" />
           </div>
           <div class="field">
             <Button label="Registrar Empresa" class="p-button-secondary" />
@@ -44,13 +61,15 @@ import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import Button from "primevue/button";
 import Card from "primevue/card";
-import Vue, { reactive, ref, computed } from "vue";
+import Vue, { reactive, ref, computed, onMounted } from "vue";
 import {
   useRouter,
   useContext,
+  useAsync,
   defineComponent,
 } from "@nuxtjs/composition-api";
-export default Vue.extend({
+export default defineComponent({
+  middleware: "login",
   components: {
     InputText,
     Dropdown,
@@ -58,7 +77,8 @@ export default Vue.extend({
     Toast,
     Card,
   },
-  async setup() {
+  setup() {
+    const router = useRouter();
     const user = reactive({
       username: "",
       password: "",
@@ -71,25 +91,32 @@ export default Vue.extend({
     }));
 
     const v$ = useVuelidate(rules, user);
-    console.log(user);
+    onMounted(() => {
+      companyList();
+    });
     const { $axios } = useContext();
-
+    const companies = ref([]);
+    const companyList = () =>
+      useAsync(async () => {
+        await $axios.get("/login/companies").then((resp) => {
+          companies.value = resp.data;
+        });
+      });
     const login = async (isFormValid: Boolean) => {
       v$.value.$touch();
       const userStore = useUserStore();
       if (isFormValid) {
-        const response = await userStore.login(user);
-        if (response.status) {
-          useRouter().push("/");
-        } else {
+        const resp = await userStore.login(user, $axios);
+        if (resp.value.status) {
+          router.push("/");
         }
       }
     };
-
     return {
       v$,
-      login,
       user,
+      companies,
+      login,
     };
   },
 });

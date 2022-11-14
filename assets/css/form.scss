@@ -1,0 +1,31 @@
+h1 {
+    color: hsl(210, 9%, 31%);
+    margin: 0;
+    font-size: 26px !important;
+}
+
+h2 {
+    color: hsl(210, 9%, 31%);
+    margin: 0;
+    font-size: 20px !important;
+}
+
+.title-form-layout {
+    vertical-align: middle;
+}
+
+.form-card {
+    background: white;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.p-dialog .p-dialog-content {
+    overflow-y: visible !important;
+}
+
+.p-dialog-mask {
+    position: absolute;
+    pointer-events: auto;
+    /* (optional, doesn't cover whole area when scroll presents) */
+}
