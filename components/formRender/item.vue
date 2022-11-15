@@ -118,10 +118,13 @@
           :class="{
             'p-invalid': validate,
           }"
+          :key="'chk-' + subindex.toString()"
         />
-        <label :for="item.name.toString() + subindex.toString()">{{
-          subitem.value
-        }}</label>
+        <label
+          :for="item.name.toString() + subindex.toString()"
+          :key="'chk-' + subindex.toString()"
+          >{{ subitem.value }}</label
+        >
       </template>
       <form-render-error-message v-bind="{ item, v, validate }" />
     </template>
@@ -138,8 +141,12 @@ import Dropdown from "primevue/dropdown";
 import CascadeSelect from "primevue/cascadeselect";
 import Checkbox from "primevue/checkbox";
 import { Validation } from "@vuelidate/core";
-import { defineComponent, computed, ref } from "@nuxtjs/composition-api";
-import { define } from "mime";
+import {
+  defineComponent,
+  computed,
+  ref,
+  onMounted,
+} from "@nuxtjs/composition-api";
 export default defineComponent({
   components: {
     InputText,
@@ -184,7 +191,7 @@ export default defineComponent({
     };
     const validate = computed((): boolean => {
       if (item.validate !== undefined) {
-        return v[item.name].$error;
+        return v.values[item.name].$error;
       }
       return false;
     });
@@ -201,6 +208,8 @@ export default defineComponent({
       hiddenItem,
       eventItem,
       validate,
+      values,
+      v,
     };
   },
 });

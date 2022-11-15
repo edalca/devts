@@ -100,7 +100,6 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import { useUserStore } from "~/store/user";
 import {
   onMounted,
   ref,
@@ -153,7 +152,7 @@ export default defineComponent({
       dialogRender.value.showDialog(true);
     };
     const edit = async (values: any) => {
-      console.log(values);
+      dialogRender.value.editForm(values);
     };
 
     return {

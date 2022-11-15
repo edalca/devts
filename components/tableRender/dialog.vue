@@ -11,7 +11,7 @@
       <template #header>
         <h2>{{ edit ? conf.titleEdit : conf.titleNew }}</h2>
       </template>
-      <form-render ref="form" :items="items" />
+      <form-render ref="form" :items="items" :data="data" />
       <template #footer>
         <Button
           label="Guardar"
@@ -30,6 +30,7 @@
   </div>
 </template>
 <script lang="ts">
+import { VForm } from "~/types/render";
 import Dialog from "primevue/dialog";
 import { conf, item } from "~/types/form";
 import Button from "primevue/button";
@@ -49,39 +50,39 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    const display = ref(false);
-    const edit = ref(false);
-    const editID = ref(0);
-    const data = ref([]);
-    const form = ref();
-
-    const showDialog = (value: boolean) => {
-      if (!value) {
-        editID.value = 0;
-        edit.value = false;
-        data.value = [];
-      }
-      display.value = value;
-    };
-    const editForm = (values: any) => {
-      data.value = values;
-      showDialog(true);
-      editID.value = values.id;
-      edit.value = true;
-    };
-    const save = () => {
-      form.value.getValidation();
-    };
+  data() {
     return {
-      display,
-      showDialog,
-      editForm,
-      edit,
-      data,
-      save,
-      form,
+      data: {},
+      display: false,
+      edit: false,
+      editID: 0,
     };
+  },
+  computed: {
+    form(): VForm {
+      return this.$refs.form as VForm;
+    },
+  },
+  methods: {
+    showDialog(value: boolean) {
+      if (!value) {
+        this.editID = 0;
+        this.edit = false;
+        this.data = {};
+      }
+      this.display = value;
+    },
+    editForm(values: any) {
+      this.data = values;
+      this.showDialog(true);
+      this.editID = values.id;
+      this.edit = true;
+    },
+    save() {
+      if (this.form.getValidation()) {
+        console.log(this.form.getValues());
+      }
+    },
   },
 });
 </script>

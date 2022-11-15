@@ -1,6 +1,6 @@
 <template>
   <span v-if="validate" style="color: #f05e5c">
-    <small>{{ v[item.name].$errors[0].$message }}</small>
+    <small>{{ v.values[item.name].$errors[0].$message }}</small>
   </span>
 </template>
 <script lang="ts">

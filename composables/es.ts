@@ -10,6 +10,5 @@ export function useES(url: String) {
     });
     esRoutes.push(router);
   });
-  console.log(esRoutes);
   return esRoutes;
 }

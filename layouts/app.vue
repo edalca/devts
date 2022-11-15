@@ -43,8 +43,14 @@ import modules from "../content/modules";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import Toast from "primevue/toast";
-import { defineComponent, ref, computed } from "@nuxtjs/composition-api";
-export default {
+import {
+  defineComponent,
+  ref,
+  computed,
+  useRouter,
+} from "@nuxtjs/composition-api";
+export default defineComponent({
+  middleware: "auth",
   components: {
     Button,
     Menu,
@@ -139,5 +145,5 @@ export default {
       username,
     };
   },
-};
+});
 </script>
