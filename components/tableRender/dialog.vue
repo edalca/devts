@@ -69,6 +69,7 @@ export default defineComponent({
         this.editID = 0;
         this.edit = false;
         this.data = {};
+        this.form.resetValues();
       }
       this.display = value;
     },
@@ -80,7 +81,6 @@ export default defineComponent({
     },
     save() {
       if (this.form.getValidation()) {
-        console.log(this.form.getValues());
       }
     },
   },

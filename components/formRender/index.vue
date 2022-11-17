@@ -6,7 +6,7 @@
       </template>
       <template v-else>
         <form-render-item
-          v-bind="{ item, values, index, v: v$ }"
+          v-bind="{ item, values, index }"
           v-if="item.type !== 'none'"
           :key="index"
         />
@@ -17,15 +17,7 @@
 <script lang="ts">
 import { item } from "~/types/form";
 import { useUserStore } from "~/store/user";
-import { useVuelidate } from "@vuelidate/core";
-import {
-  defineComponent,
-  PropType,
-  ref,
-  onMounted,
-  reactive,
-  computed,
-} from "@nuxtjs/composition-api";
+import { defineComponent, PropType } from "@nuxtjs/composition-api";
 export default defineComponent({
   props: {
     items: {
@@ -40,19 +32,11 @@ export default defineComponent({
   mounted() {
     this.setValues(this.data);
   },
-  setup() {
-    return { v$: useVuelidate() };
-  },
   data() {
     return {
       values: this.structure(),
       valuesReset: this.structure(),
       edit: false,
-    };
-  },
-  validations() {
-    return {
-      values: this.validate,
     };
   },
   computed: {
@@ -74,6 +58,11 @@ export default defineComponent({
       });
       return rule;
     },
+  },
+  validations() {
+    return {
+      values: this.validate,
+    };
   },
   methods: {
     structure() {
@@ -101,20 +90,18 @@ export default defineComponent({
       return values;
     },
     async getValidation() {
-      await this.v$.$touch();
-      return this.v$.$invalid;
+      this.$v.$touch();
+      return this.$v.$invalid;
     },
     getValues() {
       return this.values;
     },
     setValues(value: any) {
-      console.log(this.values);
       this.items.forEach((item) => {
         if (item.type !== "divide") {
           if (item.type !== "none") this.values[item.name] = value[item.name];
         }
       });
-      console.log(this.values);
       this.edit = true;
     },
     resetValues() {

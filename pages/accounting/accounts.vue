@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts">
-import { required, helpers } from "@vuelidate/validators";
+import { required, helpers } from "vuelidate/lib/validators";
 import { form } from "~/types/form";
 import { defineComponent, useRoute, onMounted } from "@nuxtjs/composition-api";
 import { useES } from "~/composables/es";
@@ -64,10 +64,7 @@ export default defineComponent({
             return values.accountNumber;
           },
           validate: {
-            required: helpers.withMessage(
-              "El numero de cuenta es requerido",
-              required
-            ),
+            required,
           },
         },
         {

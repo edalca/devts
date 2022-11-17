@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { form } from "~/types/form";
-import { required, helpers } from "@vuelidate/validators";
+import { required, helpers } from "vuelidate/lib/validators";
 import { defineComponent, useRoute, onMounted } from "@nuxtjs/composition-api";
 import { useES } from "~/composables/es";
 export default defineComponent({
@@ -38,7 +38,7 @@ export default defineComponent({
             return values.code;
           },
           validate: {
-            required: helpers.withMessage("El codigo es requerido", required),
+            required,
           },
         },
         {
@@ -51,10 +51,7 @@ export default defineComponent({
             return values.costcenter;
           },
           validate: {
-            required: helpers.withMessage(
-              "El centro de costo es requerido",
-              required
-            ),
+            required,
           },
         },
         {
@@ -67,10 +64,7 @@ export default defineComponent({
             return values.description;
           },
           validate: {
-            required: helpers.withMessage(
-              "La descripcion es requerida",
-              required
-            ),
+            required,
           },
         },
       ],

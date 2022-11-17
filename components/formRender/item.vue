@@ -12,7 +12,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, v, validate }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'textArea'">
       <form-render-label v-bind="{ item }" />
@@ -26,7 +26,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, v, validate }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'number'">
       <form-render-label v-bind="{ item }" />
@@ -40,7 +40,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, v, validate }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'date'">
       <form-render-label v-bind="{ item }" />
@@ -56,7 +56,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, v, validate }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'select'">
       <form-render-label v-bind="{ item }" />
@@ -87,7 +87,7 @@
           <small>{{ props.option[item.small ?? ""] }}</small>
         </template>
       </Dropdown>
-      <form-render-error-message v-bind="{ item, v, validate }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'cascade'">
       <form-render-label v-bind="{ item }" />
@@ -104,7 +104,7 @@
         :optionGroupLabel="item.options.grouplabel"
         :optionGroupChildren="item.options.groupchildren"
       />
-      <form-render-error-message v-bind="{ item, v, validate }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'checkbox'">
       <template v-for="(subitem, subindex) in item.options">
@@ -126,7 +126,7 @@
           >{{ subitem.value }}</label
         >
       </template>
-      <form-render-error-message v-bind="{ item, v, validate }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
   </div>
 </template>
@@ -140,13 +140,7 @@ import Calendar from "primevue/calendar";
 import Dropdown from "primevue/dropdown";
 import CascadeSelect from "primevue/cascadeselect";
 import Checkbox from "primevue/checkbox";
-import { Validation } from "@vuelidate/core";
-import {
-  defineComponent,
-  computed,
-  ref,
-  onMounted,
-} from "@nuxtjs/composition-api";
+import { defineComponent } from "@nuxtjs/composition-api";
 export default defineComponent({
   components: {
     InputText,
@@ -170,47 +164,43 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    v: {
-      type: Object as PropType<Validation>,
-      required: true,
+  },
+  data() {
+    return {
+      options: [],
+    };
+  },
+  computed: {
+    validate(): boolean {
+      if (this.item.validate !== undefined) {
+        console.log(this.$parent.$v.values[this.item.name]);
+        return this.$parent.$v.values[this.item.name].$error;
+      }
+      return false;
     },
   },
-  setup({ item, values, v }) {
-    const hiddenItem = () => {
+  methods: {
+    hiddenItem() {
       if (
-        item.type == "text" ||
-        item.type == "number" ||
-        item.type == "select" ||
-        item.type == "date"
+        this.item.type == "text" ||
+        this.item.type == "number" ||
+        this.item.type == "select" ||
+        this.item.type == "date"
       ) {
-        if (item?.hidden !== undefined) {
-          return !item.hidden(values);
+        if (this.item?.hidden !== undefined) {
+          return !this.item.hidden(this.values);
         }
       }
       return true;
-    };
-    const validate = computed((): boolean => {
-      if (item.validate !== undefined) {
-        return v.values[item.name].$error;
-      }
-      return false;
-    });
-    const eventItem = () => {
-      if (item.type !== "datatable") {
-        if (item.on !== undefined) {
-          return item.on(values);
+    },
+    eventItem() {
+      if (this.item.type !== "datatable") {
+        if (this.item.on !== undefined) {
+          return this.item.on(this.values);
         }
       }
       return {};
-    };
-
-    return {
-      hiddenItem,
-      eventItem,
-      validate,
-      values,
-      v,
-    };
+    },
   },
 });
 </script>
