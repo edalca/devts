@@ -6,7 +6,7 @@
       </template>
       <template v-else>
         <form-render-item
-          v-bind="{ item, values, index }"
+          v-bind="{ item, values, index, v: $v }"
           v-if="item.type !== 'none'"
           :key="index"
         />

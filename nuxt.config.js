@@ -23,7 +23,12 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["~/plugins/persist.ts", "~/plugins/axios.ts", "~/plugins/vuelidate.ts"],
+  plugins: [
+    "~/plugins/persist.ts",
+    "~/plugins/axios.ts",
+    "~/plugins/vuelidate.ts",
+    "~/plugins/primevue.ts",
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

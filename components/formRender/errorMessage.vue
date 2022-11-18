@@ -1,6 +1,6 @@
 <template>
   <span v-if="validate" style="color: #f05e5c">
-    <small>{{}}</small>
+    <small>{{ messages }}</small>
   </span>
 </template>
 <script lang="ts">
@@ -16,6 +16,13 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+    v: {
+      type: Object as any,
+      required: true,
+    },
+  },
+  computed: {
+    messages() {},
   },
 });
 </script>

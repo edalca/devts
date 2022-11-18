@@ -8,7 +8,7 @@ export interface form {
   import?: imports;
   items: item[];
 }
-interface fetch {
+export interface fetch {
   url: string;
   params?: object;
 }

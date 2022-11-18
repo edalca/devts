@@ -32,10 +32,12 @@
 <script lang="ts">
 import { VForm } from "~/types/render";
 import Dialog from "primevue/dialog";
-import { conf, item } from "~/types/form";
+import { conf, item, fetch } from "~/types/form";
 import Button from "primevue/button";
+import errorMessage from "~/mixins/errorMessages";
 import { PropType, defineComponent, ref } from "@nuxtjs/composition-api";
 export default defineComponent({
+  mixins: [errorMessage],
   components: {
     Dialog,
     Button,
@@ -49,6 +51,10 @@ export default defineComponent({
       type: Object as PropType<conf>,
       required: true,
     },
+    fetch: {
+      type: Object as PropType<fetch>,
+      required: true,
+    },
   },
   data() {
     return {
@@ -58,18 +64,14 @@ export default defineComponent({
       editID: 0,
     };
   },
-  computed: {
-    form(): VForm {
-      return this.$refs.form as VForm;
-    },
-  },
   methods: {
     showDialog(value: boolean) {
+      const form = this.$refs.form as VForm;
       if (!value) {
         this.editID = 0;
         this.edit = false;
         this.data = {};
-        this.form.resetValues();
+        form.resetValues();
       }
       this.display = value;
     },
@@ -79,8 +81,40 @@ export default defineComponent({
       this.editID = values.id;
       this.edit = true;
     },
-    save() {
-      if (this.form.getValidation()) {
+    async save() {
+      const form = this.$refs.form as VForm;
+      const data = form.getValues();
+      if (form.getValidation() == false) {
+        console.log("Entro");
+        if (!this.edit) {
+          await this.$axios
+            .post(this.fetch.url, form.getValues())
+            .then((res) => {
+              this.$toast.add({
+                severity: res.data.status ? "success" : "error",
+                summary: "Mensaje de Sistema",
+                detail: res.data.message,
+                life: 3000,
+              });
+            })
+            .catch((err) => {
+              this.errorMessages(err);
+            });
+        } else {
+          await this.$axios
+            .put(this.fetch.url + "/" + this.editID, form.getValues())
+            .then((res) => {
+              this.$toast.add({
+                severity: res.data.status ? "success" : "error",
+                summary: "Mensaje de Sistema",
+                detail: res.data.message,
+                life: 3000,
+              });
+            })
+            .catch((err) => {
+              this.errorMessages(err);
+            });
+        }
       }
     },
   },

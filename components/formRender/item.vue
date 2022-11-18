@@ -12,7 +12,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
+      <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
     <template v-else-if="item.type == 'textArea'">
       <form-render-label v-bind="{ item }" />
@@ -26,7 +26,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
+      <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
     <template v-else-if="item.type == 'number'">
       <form-render-label v-bind="{ item }" />
@@ -40,7 +40,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
+      <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
     <template v-else-if="item.type == 'date'">
       <form-render-label v-bind="{ item }" />
@@ -56,7 +56,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
+      <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
     <template v-else-if="item.type == 'select'">
       <form-render-label v-bind="{ item }" />
@@ -87,7 +87,7 @@
           <small>{{ props.option[item.small ?? ""] }}</small>
         </template>
       </Dropdown>
-      <form-render-error-message v-bind="{ item, validate }" />
+      <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
     <template v-else-if="item.type == 'cascade'">
       <form-render-label v-bind="{ item }" />
@@ -104,7 +104,7 @@
         :optionGroupLabel="item.options.grouplabel"
         :optionGroupChildren="item.options.groupchildren"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
+      <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
     <template v-else-if="item.type == 'checkbox'">
       <template v-for="(subitem, subindex) in item.options">
@@ -126,7 +126,7 @@
           >{{ subitem.value }}</label
         >
       </template>
-      <form-render-error-message v-bind="{ item, validate }" />
+      <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
   </div>
 </template>
@@ -164,6 +164,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    v: {
+      type: Object as any,
+      required: true,
+    },
   },
   data() {
     return {
@@ -173,8 +177,7 @@ export default defineComponent({
   computed: {
     validate(): boolean {
       if (this.item.validate !== undefined) {
-        console.log(this.$parent.$v.values[this.item.name]);
-        return this.$parent.$v.values[this.item.name].$error;
+        return this.v.values[this.item.name].$error;
       }
       return false;
     },

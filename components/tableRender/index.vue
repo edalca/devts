@@ -90,7 +90,12 @@
         </template>
       </DataTable>
     </div>
-    <table-render-dialog ref="dialogRender" :items="items" :conf="config" />
+    <table-render-dialog
+      ref="dialogRender"
+      :items="items"
+      :conf="config"
+      :fetch="fetch"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -166,6 +171,7 @@ export default defineComponent({
       newRegister,
       show,
       loading,
+      fetch,
     };
   },
 });
