@@ -22,6 +22,8 @@ export default defineComponent({
       config: {
         titleNew: "Registro de Centro de Costo",
         titleEdit: "Modificar Centro de Costo",
+        editRegister: true,
+        delRegister: true,
       },
       export: {
         pdf: false,

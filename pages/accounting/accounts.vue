@@ -48,6 +48,8 @@ export default defineComponent({
       config: {
         titleNew: "Registro de Cuenta",
         titleEdit: "Editar Cuenta",
+        editRegister: true,
+        delRegister: true,
       },
       export: {
         pdf: true,
@@ -59,7 +61,7 @@ export default defineComponent({
           type: "text",
           table: true,
           label: "No. Cuenta",
-          class: "field col-6",
+          class: "field col-4",
           value: (values) => {
             return values.accountNumber;
           },
@@ -76,21 +78,57 @@ export default defineComponent({
           value: (values) => {
             return values.accountName;
           },
+          validate: {
+            required,
+          },
+        },
+        {
+          name: "isgroup",
+          type: "checkbox",
+          label: "Es Grupo",
+          table: true,
+          class: "field-checkbox col-2",
+          defaultValue: () => false,
+          value: (values) => {
+            return values.isgroup ? "Grupo" : "Detalle";
+          },
         },
         {
           name: "type",
           type: "select",
           table: true,
           label: "Tipo de Cuenta",
-          class: "field col-4",
-          value: (values) => {
-            return values.type;
+          class: "field col-6",
+          value: (values: any) => {
+            return options.find((item) => item.value == values.type)?.name;
           },
           options: {
             type: "static",
             label: "name",
             value: "value",
             values: options,
+          },
+          validate: {
+            required,
+          },
+        },
+        {
+          name: "accounttypes",
+          type: "select",
+          label: "Clasificiacion Cuenta",
+          table: true,
+          class: "field col-6",
+          value: (values: any) => {
+            return values.accounttypes?.accounttype ?? "";
+          },
+          options: {
+            type: "remote",
+            label: "accounttype",
+            url: "accounting/accounttypes",
+            params: {},
+          },
+          hidden: (values) => {
+            return values.isgroup;
           },
         },
       ],

@@ -27,7 +27,8 @@
       "@nuxt/types",
       "@types/node",
       "@nuxtjs/axios",
-      "@types/vuelidate"
+      "@types/vuelidate",
+      "@nuxtjs/moment"
     ]
   },
   "exclude": [

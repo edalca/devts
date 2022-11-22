@@ -63,29 +63,16 @@
       <Dropdown
         :id="item.name"
         v-model="values[item.name]"
-        v-bind="item.bind"
         v-on="eventItem()"
         :tabindex="index.toString()"
         placeholder="Seleccione"
+        :optionLabel="item.options.label"
+        :optionValue="item.options.value ?? null"
         :class="{
           'p-invalid': validate,
         }"
+        :options="options"
       >
-        <template #value="props">
-          <div v-if="props.value" style="font-size: 0.9em">
-            <span v-if="item.small !== undefined">
-              <b>{{ props.value[item.options.label] }}</b>
-            </span>
-            <small>{{ props.value[item.small ?? ""] }}</small>
-          </div>
-          <span v-else>{{ props.placeholder }}</span>
-        </template>
-        <template #option="props" v-if="item.small">
-          <span>
-            <b>{{ props.option[item.options.label] }}</b>
-          </span>
-          <small>{{ props.option[item.small ?? ""] }}</small>
-        </template>
       </Dropdown>
       <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
@@ -101,31 +88,25 @@
         :class="{
           'p-invalid': validate,
         }"
+        :options="options"
         :optionGroupLabel="item.options.grouplabel"
         :optionGroupChildren="item.options.groupchildren"
       />
       <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
     <template v-else-if="item.type == 'checkbox'">
-      <template v-for="(subitem, subindex) in item.options">
-        <Checkbox
-          :inputId="item.name.toString() + subindex.toString()"
-          v-model="values[item.name]"
-          v-bind="item.bind"
-          v-on="eventItem()"
-          :tabindex="index.toString()"
-          :value="subitem.value"
-          :class="{
-            'p-invalid': validate,
-          }"
-          :key="'chk-' + subindex.toString()"
-        />
-        <label
-          :for="item.name.toString() + subindex.toString()"
-          :key="'chk-' + subindex.toString()"
-          >{{ subitem.value }}</label
-        >
-      </template>
+      <Checkbox
+        :inputId="item.name.toString() + index.toString()"
+        v-model="values[item.name]"
+        v-on="eventItem()"
+        :binary="true"
+        :tabindex="index.toString()"
+        :class="{
+          'p-invalid': validate,
+        }"
+        :key="'chk-' + index.toString()"
+      />
+      <form-render-label v-bind="{ item }" />
       <form-render-error-message v-bind="{ item, validate, v }" />
     </template>
   </div>
@@ -150,6 +131,9 @@ export default defineComponent({
     Dropdown,
     CascadeSelect,
     Checkbox,
+  },
+  mounted() {
+    this.getOptions();
   },
   props: {
     item: {
@@ -191,11 +175,25 @@ export default defineComponent({
         this.item.type == "date"
       ) {
         if (this.item?.hidden !== undefined) {
-          return !this.item.hidden(this.values);
+          const hidden = !this.item.hidden(this.values);
+          return hidden;
         }
       }
       return true;
     },
+    async getOptions() {
+      if (this.item.type == "select" || this.item.type == "cascade") {
+        if (this.item.options.type == "static") {
+          this.options = this.item.options.values;
+        }
+        if (this.item.options.type == "remote") {
+          await this.$axios.get(this.item.options.url).then((resp) => {
+            this.options = resp.data;
+          });
+        }
+      }
+    },
+
     eventItem() {
       if (this.item.type !== "datatable") {
         if (this.item.on !== undefined) {

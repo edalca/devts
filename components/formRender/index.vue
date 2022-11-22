@@ -16,7 +16,7 @@
 </template>
 <script lang="ts">
 import { item } from "~/types/form";
-import { useUserStore } from "~/store/user";
+
 import { defineComponent, PropType } from "@nuxtjs/composition-api";
 export default defineComponent({
   props: {
@@ -28,14 +28,18 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    structure: {
+      type: Object,
+      required: true,
+    },
   },
   mounted() {
     this.setValues(this.data);
   },
   data() {
     return {
-      values: this.structure(),
-      valuesReset: this.structure(),
+      values: this.structure,
+      valuesReset: this.structure,
       edit: false,
     };
   },
@@ -65,30 +69,6 @@ export default defineComponent({
     };
   },
   methods: {
-    structure() {
-      const values = {} as any;
-      this.items.forEach((item) => {
-        if (item.type == "text") values[item.name] = item.defaultValue ?? "";
-        if (item.type == "textArea")
-          values[item.name] = item.defaultValue ?? "";
-        if (item.type == "number") values[item.name] = item.defaultValue ?? 0;
-        if (item.type == "select")
-          values[item.name] = item.defaultValue ?? null;
-        if (item.type == "date") values[item.name] = item.defaultValue ?? null;
-        if (item.type == "checkbox") {
-          if (item.bind.binary == true) {
-            values[item.name] = item.defaultValue ?? false;
-          } else {
-            values[item.name] = item.defaultValue ?? "";
-          }
-        }
-        if (item.type == "radiobutton")
-          values[item.name] = item.defaultValue ?? "";
-        if (item.type == "datatable") values[item.name] = [];
-      });
-      values["companies_id"] = useUserStore().getCompany;
-      return values;
-    },
     async getValidation() {
       this.$v.$touch();
       return this.$v.$invalid;

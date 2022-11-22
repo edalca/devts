@@ -12,6 +12,7 @@
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/composition-api": "^0.33.1",
     "@pinia/nuxt": "0.2.1",
+    "bootstrap-icons": "^1.10.2",
     "core-js": "^3.26.0",
     "nuxt": "^2.15.8",
     "pinia": "^2.0.23",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/moment": "^1.6.1",
     "@types/vuelidate": "^0.7.15"
   }
 }

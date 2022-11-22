@@ -70,24 +70,26 @@
             :key="index"
           >
             <template #body="{ data }">
-              <template v-if="index == 0">
-                <a
-                  @click="edit(data)"
-                  style="
-                    text-decoration: none;
-                    cursor: pointer;
-                    color: black;
-                    font-weight: 600;
-                  "
-                  >{{ item.value(data) }}</a
-                >
-              </template>
-              <template v-else>
-                {{ item.value(data) }}
-              </template>
+              {{ item.value(data) }}
             </template>
           </Column>
         </template>
+        <Column header="Optiones" :styles="{ 'max-width': '150px' }">
+          <template #body="slot">
+            <Button
+              v-if="config.editRegister"
+              icon="pi pi-pencil"
+              @click="edit(slot.data)"
+              class="p-button-rounded p-button-text p-button-warning p-button-sm"
+            />
+            <Button
+              v-if="config.delRegister"
+              icon="pi pi-trash"
+              @click="del(slot)"
+              class="p-button-rounded p-button-text p-button-danger p-button-sm"
+            />
+          </template>
+        </Column>
       </DataTable>
     </div>
     <table-render-dialog
@@ -95,7 +97,9 @@
       :items="items"
       :conf="config"
       :fetch="fetch"
+      :structure="structure"
     />
+    <ConfirmDialog />
   </div>
 </template>
 <script lang="ts">
@@ -105,6 +109,9 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
+import ConfirmDialog from "primevue/confirmdialog";
+import { useUserStore } from "~/store/user";
+
 import {
   onMounted,
   ref,
@@ -124,20 +131,73 @@ export default defineComponent({
     DataTable,
     InputText,
     Button,
+    ConfirmDialog,
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    async del(value: any) {
+      this.$confirm.require({
+        message: "¿Desea Eliminar este registro?",
+        header: "Eliminar Registro",
+        icon: "pi pi-info-circle",
+        acceptClass: "p-button-danger",
+        acceptLabel: "Eliminar",
+        rejectLabel: "Cancelar",
+        accept: async () => {
+          await this.$axios
+            .delete(this.form.fetch.url + "/" + value.data.id)
+            .then((res) => {
+              this.$toast.add({
+                severity: res.data.status ? "success" : "error",
+                summary: "Mensaje Sistema",
+                detail: res.data.message,
+                life: 3000,
+              });
+              this.show();
+            });
+        },
+      });
+    },
   },
   setup({ form }) {
-    const { $axios } = useContext();
+    const { $axios, $moment } = useContext();
     onMounted(() => {
       innerHeight.value = window.innerHeight;
       tableHeight.value = innerHeight.value * 0.8;
       show();
+      formStructure();
     });
+    const structure = ref({});
     const loading = ref(true);
     const dialogRender = ref();
     const { fetch, config } = form;
     const items = form.items.filter(
       (item) => item.type !== "divide" && item.table == true
     );
+    const formStructure = () => {
+      const values = {} as any;
+      form.items.forEach((item) => {
+        if (item.type == "text")
+          values[item.name] = item.defaultValue?.() ?? "";
+        if (item.type == "textArea")
+          values[item.name] = item.defaultValue?.() ?? "";
+        if (item.type == "number")
+          values[item.name] = item.defaultValue?.() ?? 0;
+        if (item.type == "select")
+          values[item.name] = item.defaultValue ?? null;
+        if (item.type == "date")
+          values[item.name] = item.defaultValue?.() ?? null;
+        if (item.type == "checkbox")
+          values[item.name] = item.defaultValue?.() ?? false;
+        if (item.type == "radiobutton")
+          values[item.name] = item.defaultValue ?? "";
+        if (item.type == "datatable") values[item.name] = [];
+      });
+      values["companies_id"] = useUserStore().getCompany;
+      structure.value = values;
+    };
     const searchs = ref({});
     const innerHeight = ref(0);
     const tableHeight = ref(0);
@@ -171,6 +231,7 @@ export default defineComponent({
       newRegister,
       show,
       loading,
+      structure,
       fetch,
     };
   },
