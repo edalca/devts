@@ -42,7 +42,7 @@ interface input {
   table: boolean;
   class: string;
   bind?: any;
-  defaultValue: () => any;
+  defaultValue: string | number;
   value: (values: any) => any;
   hidden?: (values: any) => boolean;
   on?: (values: any) => any;
@@ -55,28 +55,28 @@ interface select {
   table: boolean;
   class: string;
   options:
-    | {
-        type: "remote";
-        url: string;
-        params: object;
-        label: string;
-        sublabel?: string;
-        grouplabel?: string;
-        groupchildren?: [];
-        value?: any;
-      }
-    | {
-        type: "static";
-        values: any;
-        label: string;
-        sublabel?: string;
-        value?: any;
-        grouplabel?: string;
-        groupchildren?: [];
-      };
+  | {
+    type: "remote";
+    url: string;
+    params: object;
+    label: string;
+    sublabel?: string;
+    grouplabel?: string;
+    groupchildren?: [];
+    value?: any;
+  }
+  | {
+    type: "static";
+    values: any;
+    label: string;
+    sublabel?: string;
+    value?: any;
+    grouplabel?: string;
+    groupchildren?: [];
+  };
   bind?: any;
   small?: string;
-  defaultValue: () => any;
+  defaultValue: null | Array<Object | string>;
   value: (values: any) => any;
   hidden?: (values: any) => boolean;
   on?: (values: any) => any;
@@ -90,7 +90,7 @@ interface check {
   class: string;
   bind?: any;
   on?: (values: any) => any;
-  defaultValue: () => any;
+  defaultValue: boolean;
   value: (values: any) => any;
   validate?: any;
 }
@@ -103,7 +103,7 @@ interface option {
   class: string;
   bind?: any;
   on?: (values: any) => any;
-  defaultValue: () => any;
+  defaultValue: string | number;
   value: (values: any) => any;
   options: Array<{
     value: string;
@@ -117,7 +117,6 @@ interface datatable {
   label: string;
   table: boolean;
   class: string;
-  defaultValue: () => any;
   value: (values: any) => any;
   options: Array<{
     value: string;

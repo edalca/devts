@@ -36,7 +36,7 @@ export default defineComponent({
           table: true,
           label: "Codigo",
           class: "field col-6",
-          defaultValue: () => "",
+          defaultValue: "",
           value: (values) => {
             return values.code;
           },
@@ -50,7 +50,7 @@ export default defineComponent({
           table: true,
           label: "Centro de Costo",
           class: "field col-6",
-          defaultValue: () => "",
+          defaultValue: "",
           value: (values) => {
             return values.costcenter;
           },
@@ -64,7 +64,7 @@ export default defineComponent({
           table: true,
           label: "Descripcion",
           class: "field col-12",
-          defaultValue: () => "",
+          defaultValue: "",
           value: (values) => {
             return values.description;
           },

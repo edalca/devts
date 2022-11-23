@@ -62,7 +62,7 @@ export default defineComponent({
           table: true,
           label: "No. Cuenta",
           class: "field col-4",
-          defaultValue: () => "",
+          defaultValue: "",
           value: (values) => {
             return values.accountNumber;
           },
@@ -76,7 +76,7 @@ export default defineComponent({
           table: true,
           label: "Nombre Cuenta",
           class: "field col-6",
-          defaultValue: () => "",
+          defaultValue: "",
           value: (values) => {
             return values.accountName;
           },
@@ -90,7 +90,7 @@ export default defineComponent({
           label: "Es Grupo",
           table: true,
           class: "field-checkbox col-2",
-          defaultValue: () => false,
+          defaultValue: false,
           value: (values) => {
             return values.isgroup ? "Grupo" : "Detalle";
           },
@@ -101,7 +101,7 @@ export default defineComponent({
           table: true,
           label: "Tipo de Cuenta",
           class: "field col-6",
-          defaultValue: () => null,
+          defaultValue: null,
           value: (values: any) => {
             return options.find((item) => item.value == values.type)?.name;
           },
@@ -121,7 +121,7 @@ export default defineComponent({
           label: "Clasificiacion Cuenta",
           table: true,
           class: "field col-6",
-          defaultValue: () => null,
+          defaultValue: null,
           value: (values: any) => {
             return values.accounttypes?.accounttype ?? "";
           },
@@ -136,7 +136,6 @@ export default defineComponent({
           },
           validate: {
             required: requiredIf((value) => {
-              console.log(value);
               return true;
             }),
           },
