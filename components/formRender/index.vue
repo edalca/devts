@@ -16,7 +16,7 @@
 </template>
 <script lang="ts">
 import { item } from "~/types/form";
-
+import { useUserStore } from "~/store/user";
 import { defineComponent, PropType } from "@nuxtjs/composition-api";
 export default defineComponent({
   props: {
@@ -28,18 +28,17 @@ export default defineComponent({
       type: Object,
       required: true,
     },
-    structure: {
-      type: Object,
-      required: true,
-    },
   },
-  mounted() {
+  async mounted() {
+    this.valuesReset = await this.structure();
+    this.values = await this.structure();
+
     this.setValues(this.data);
   },
   data() {
     return {
-      values: this.structure,
-      valuesReset: this.structure,
+      values: {},
+      valuesReset: {},
       edit: false,
     };
   },
@@ -69,11 +68,37 @@ export default defineComponent({
     };
   },
   methods: {
+    async structure() {
+      const values = {} as any;
+      await Promise.all(
+        this.items.map(async (item) => {
+          if (item.type == "text")
+            values[item.name] = await item.defaultValue();
+          else if (item.type == "textArea")
+            values[item.name] = await item.defaultValue();
+          else if (item.type == "number")
+            values[item.name] = await item.defaultValue();
+          else if (item.type == "select")
+            values[item.name] = await item.defaultValue();
+          else if (item.type == "date")
+            values[item.name] = await item.defaultValue();
+          else if (item.type == "checkbox")
+            values[item.name] = await item.defaultValue();
+          else if (item.type == "radiobutton")
+            values[item.name] = await item.defaultValue();
+          else if (item.type == "datatable") values[item.name] = [];
+        })
+      );
+      values["companies_id"] = useUserStore().getCompany;
+      console.log(values);
+      return values;
+    },
     async getValidation() {
       this.$v.$touch();
       return this.$v.$invalid;
     },
     getValues() {
+      console.log(this.values);
       return this.values;
     },
     setValues(value: any) {

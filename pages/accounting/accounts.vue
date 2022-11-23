@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts">
-import { required, helpers } from "vuelidate/lib/validators";
+import { required, helpers, requiredIf } from "vuelidate/lib/validators";
 import { form } from "~/types/form";
 import { defineComponent, useRoute, onMounted } from "@nuxtjs/composition-api";
 import { useES } from "~/composables/es";
@@ -62,6 +62,7 @@ export default defineComponent({
           table: true,
           label: "No. Cuenta",
           class: "field col-4",
+          defaultValue: () => "",
           value: (values) => {
             return values.accountNumber;
           },
@@ -75,6 +76,7 @@ export default defineComponent({
           table: true,
           label: "Nombre Cuenta",
           class: "field col-6",
+          defaultValue: () => "",
           value: (values) => {
             return values.accountName;
           },
@@ -99,6 +101,7 @@ export default defineComponent({
           table: true,
           label: "Tipo de Cuenta",
           class: "field col-6",
+          defaultValue: () => null,
           value: (values: any) => {
             return options.find((item) => item.value == values.type)?.name;
           },
@@ -118,6 +121,7 @@ export default defineComponent({
           label: "Clasificiacion Cuenta",
           table: true,
           class: "field col-6",
+          defaultValue: () => null,
           value: (values: any) => {
             return values.accounttypes?.accounttype ?? "";
           },
@@ -129,6 +133,12 @@ export default defineComponent({
           },
           hidden: (values) => {
             return values.isgroup;
+          },
+          validate: {
+            required: requiredIf((value) => {
+              console.log(value);
+              return true;
+            }),
           },
         },
       ],

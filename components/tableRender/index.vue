@@ -97,7 +97,6 @@
       :items="items"
       :conf="config"
       :fetch="fetch"
-      :structure="structure"
     />
     <ConfirmDialog />
   </div>
@@ -110,7 +109,6 @@ import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import ConfirmDialog from "primevue/confirmdialog";
-import { useUserStore } from "~/store/user";
 
 import {
   onMounted,
@@ -163,41 +161,19 @@ export default defineComponent({
   },
   setup({ form }) {
     const { $axios, $moment } = useContext();
+
     onMounted(() => {
       innerHeight.value = window.innerHeight;
       tableHeight.value = innerHeight.value * 0.8;
       show();
-      formStructure();
     });
-    const structure = ref({});
     const loading = ref(true);
     const dialogRender = ref();
     const { fetch, config } = form;
     const items = form.items.filter(
       (item) => item.type !== "divide" && item.table == true
     );
-    const formStructure = () => {
-      const values = {} as any;
-      form.items.forEach((item) => {
-        if (item.type == "text")
-          values[item.name] = item.defaultValue?.() ?? "";
-        if (item.type == "textArea")
-          values[item.name] = item.defaultValue?.() ?? "";
-        if (item.type == "number")
-          values[item.name] = item.defaultValue?.() ?? 0;
-        if (item.type == "select")
-          values[item.name] = item.defaultValue ?? null;
-        if (item.type == "date")
-          values[item.name] = item.defaultValue?.() ?? null;
-        if (item.type == "checkbox")
-          values[item.name] = item.defaultValue?.() ?? false;
-        if (item.type == "radiobutton")
-          values[item.name] = item.defaultValue ?? "";
-        if (item.type == "datatable") values[item.name] = [];
-      });
-      values["companies_id"] = useUserStore().getCompany;
-      structure.value = values;
-    };
+
     const searchs = ref({});
     const innerHeight = ref(0);
     const tableHeight = ref(0);
@@ -231,7 +207,6 @@ export default defineComponent({
       newRegister,
       show,
       loading,
-      structure,
       fetch,
     };
   },

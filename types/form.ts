@@ -7,7 +7,6 @@ export interface form {
   export: exports;
   import?: imports;
   items: item[];
-
 }
 export interface fetch {
   url: string;
@@ -32,8 +31,8 @@ interface imports {
 export interface conf {
   titleNew: string;
   titleEdit: string;
-  editRegister: boolean,
-  delRegister: boolean
+  editRegister: boolean;
+  delRegister: boolean;
 }
 
 interface input {
@@ -43,11 +42,11 @@ interface input {
   table: boolean;
   class: string;
   bind?: any;
-  defaultValue?: () => any;
+  defaultValue: () => any;
   value: (values: any) => any;
   hidden?: (values: any) => boolean;
   on?: (values: any) => any;
-  validate?: any
+  validate?: any;
 }
 interface select {
   name: string;
@@ -56,61 +55,61 @@ interface select {
   table: boolean;
   class: string;
   options:
-  | {
-    type: "remote";
-    url: string;
-    params: object;
-    label: string;
-    sublabel?: string;
-    grouplabel?: string;
-    groupchildren?: [];
-    value?: any;
-  }
-  | {
-    type: "static";
-    values: any;
-    label: string;
-    sublabel?: string;
-    value?: any;
-    grouplabel?: string;
-    groupchildren?: [];
-  };
+    | {
+        type: "remote";
+        url: string;
+        params: object;
+        label: string;
+        sublabel?: string;
+        grouplabel?: string;
+        groupchildren?: [];
+        value?: any;
+      }
+    | {
+        type: "static";
+        values: any;
+        label: string;
+        sublabel?: string;
+        value?: any;
+        grouplabel?: string;
+        groupchildren?: [];
+      };
   bind?: any;
   small?: string;
-  defaultValue?: () => any;
+  defaultValue: () => any;
   value: (values: any) => any;
   hidden?: (values: any) => boolean;
   on?: (values: any) => any;
-  validate?: any
+  validate?: any;
 }
 interface check {
-  name: string,
-  label: string,
-  type: "checkbox",
-  table: boolean,
-  class: string,
-  bind?: any,
+  name: string;
+  label: string;
+  type: "checkbox";
+  table: boolean;
+  class: string;
+  bind?: any;
   on?: (values: any) => any;
-  defaultValue?: () => any;
+  defaultValue: () => any;
   value: (values: any) => any;
-  validate?: any
+  validate?: any;
 }
 
 interface option {
   name: string;
   type: "radiobutton" | "multicheckbox";
   table: boolean;
-  label: string,
+  label: string;
   class: string;
   bind?: any;
   on?: (values: any) => any;
-  defaultValue?: () => any;
+  defaultValue: () => any;
   value: (values: any) => any;
   options: Array<{
     value: string;
     hidden?: (values: any) => boolean;
   }>;
-  validate?: any
+  validate?: any;
 }
 interface datatable {
   name: string;
@@ -118,13 +117,13 @@ interface datatable {
   label: string;
   table: boolean;
   class: string;
-  defaultValue?: () => any;
+  defaultValue: () => any;
   value: (values: any) => any;
   options: Array<{
     value: string;
     hidden?: (values: any) => boolean;
   }>;
-  validate?: any
+  validate?: any;
 }
 interface divide {
   type: "divide";

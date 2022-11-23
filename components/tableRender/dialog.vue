@@ -11,12 +11,7 @@
       <template #header>
         <h2>{{ edit ? conf.titleEdit : conf.titleNew }}</h2>
       </template>
-      <form-render
-        ref="form"
-        :items="items"
-        :data="data"
-        :structure="structure"
-      />
+      <form-render ref="form" :items="items" :data="data" />
       <template #footer>
         <Button
           label="Guardar"
@@ -60,12 +55,7 @@ export default defineComponent({
       type: Object as PropType<fetch>,
       required: true,
     },
-    structure: {
-      type: Object,
-      required: true,
-    },
   },
-
   data() {
     return {
       data: {},
@@ -95,7 +85,8 @@ export default defineComponent({
     async save() {
       const form = this.$refs.form as VForm;
       const data = await form.getValues();
-      const valid = true; /*await form.getValidation();*/
+      const valid = true;
+      await form.getValidation();
       if (!valid) {
         if (!this.edit) {
           await this.$axios
