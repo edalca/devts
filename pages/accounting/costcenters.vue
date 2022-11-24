@@ -8,6 +8,7 @@ import { form } from "~/types/form";
 import { required, helpers } from "vuelidate/lib/validators";
 import { defineComponent, useRoute, onMounted } from "@nuxtjs/composition-api";
 import { useES } from "~/composables/es";
+import { validationMessage } from "vuelidate-messages";
 export default defineComponent({
   layout: "app",
   setup() {
@@ -36,12 +37,21 @@ export default defineComponent({
           table: true,
           label: "Codigo",
           class: "field col-6",
+          unique: true,
           defaultValue: "",
           value: (values) => {
             return values.code;
           },
           validate: {
-            required,
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
           },
         },
         {
@@ -55,7 +65,15 @@ export default defineComponent({
             return values.costcenter;
           },
           validate: {
-            required,
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
           },
         },
         {
@@ -69,7 +87,15 @@ export default defineComponent({
             return values.description;
           },
           validate: {
-            required,
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
           },
         },
       ],

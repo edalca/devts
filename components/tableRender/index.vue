@@ -97,6 +97,7 @@
       :items="items"
       :conf="config"
       :fetch="fetch"
+      :values="values"
     />
     <ConfirmDialog />
   </div>

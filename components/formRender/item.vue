@@ -8,12 +8,12 @@
         v-bind="item.bind"
         :tabindex="index.toString()"
         v-on="eventItem()"
-        v-tooltip="{ value: 'Enter your username', disabled: false }"
+        v-tooltip="{ value: tooltip, disabled: !validate }"
+        @input="upperCase"
         :class="{
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'textArea'">
       <form-render-label v-bind="{ item }" />
@@ -23,11 +23,12 @@
         v-bind="item.bind"
         :tabindex="index.toString()"
         v-on="eventItem()"
+        @input="upperCase"
+        v-tooltip="{ value: tooltip, disabled: !validate }"
         :class="{
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'number'">
       <form-render-label v-bind="{ item }" />
@@ -36,12 +37,12 @@
         v-model="values[item.name]"
         v-bind="item.bind"
         v-on="eventItem()"
+        v-tooltip="{ value: tooltip, disabled: !validate }"
         :tabindex="index.toString()"
         :class="{
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'date'">
       <form-render-label v-bind="{ item }" />
@@ -50,6 +51,7 @@
         v-model="values[item.name]"
         v-bind="item.bind"
         v-on="eventItem()"
+        v-tooltip="{ value: tooltip, disabled: !validate }"
         :tabindex="index.toString()"
         dateFormat="dd/mm/yy"
         :showButtonBar="true"
@@ -57,7 +59,6 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'select'">
       <form-render-label v-bind="{ item }" />
@@ -65,6 +66,7 @@
         :id="item.name"
         v-model="values[item.name]"
         v-on="eventItem()"
+        v-tooltip="{ value: tooltip, disabled: !validate }"
         :tabindex="index.toString()"
         placeholder="Seleccione"
         :optionLabel="item.options.label"
@@ -75,7 +77,6 @@
         :options="options"
       >
       </Dropdown>
-      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'cascade'">
       <form-render-label v-bind="{ item }" />
@@ -84,6 +85,7 @@
         v-model="values[item.name]"
         v-bind="item.bind"
         v-on="eventItem()"
+        v-tooltip="{ value: tooltip, disabled: !validate }"
         :tabindex="index.toString()"
         placeholder="Seleccione"
         :class="{
@@ -93,13 +95,13 @@
         :optionGroupLabel="item.options.grouplabel"
         :optionGroupChildren="item.options.groupchildren"
       />
-      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'checkbox'">
       <Checkbox
         :inputId="item.name.toString() + index.toString()"
         v-model="values[item.name]"
         v-on="eventItem()"
+        v-tooltip="{ value: tooltip, disabled: !validate }"
         :binary="true"
         :tabindex="index.toString()"
         :class="{
@@ -108,7 +110,6 @@
         :key="'chk-' + index.toString()"
       />
       <form-render-label v-bind="{ item }" />
-      <form-render-error-message v-bind="{ item, validate }" />
     </template>
   </div>
 </template>
@@ -158,9 +159,18 @@ export default defineComponent({
   computed: {
     validate(): boolean {
       if (this.item.validate !== undefined) {
-        return this.$parent.$v.values[this.item.name].$error;
+        return this.$parent?.$v.value[this.item.name]?.$error ?? false;
       }
       return false;
+    },
+    tooltip(): string {
+      if (this.item.validate?.messages != undefined) {
+        return this.item.validate?.messages(
+          this.$parent?.$v.value[this.item.name]
+        );
+      } else {
+        return "";
+      }
     },
   },
   methods: {
@@ -198,6 +208,13 @@ export default defineComponent({
         }
       }
       return {};
+    },
+    upperCase(value: string) {
+      if (this.item.type == "text" || this.item.type == "textArea") {
+        if (this.item?.upperCase == true) {
+          this.values[this.item.name] = value.toUpperCase();
+        }
+      }
     },
   },
 });

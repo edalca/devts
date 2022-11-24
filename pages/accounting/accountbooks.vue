@@ -9,7 +9,7 @@ import { form } from "~/types/form";
 import extravalidation from "~/mixins/extravalidation";
 import { defineComponent, useRoute, useContext } from "@nuxtjs/composition-api";
 import { useES } from "~/composables/es";
-import { isUnique } from "~/composables/extravalidations";
+import { validationMessage } from "vuelidate-messages";
 export default defineComponent({
   layout: "app",
   mixins: [extravalidation],
@@ -40,12 +40,22 @@ export default defineComponent({
           table: true,
           defaultValue: "",
           class: "field col-6",
+          unique: true,
           value: (values) => {
             return values.code;
           },
+          upperCase: true,
           validate: {
-            required,
-            isUnique: isUnique("code", $axios, "accounting/accountbooks", {}),
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+                unique: () => "El codigo ingresado ya existe",
+              },
+              {}
+            ),
           },
         },
         {
@@ -59,7 +69,15 @@ export default defineComponent({
             return values.accountbook;
           },
           validate: {
-            required,
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
           },
         },
       ],

@@ -6,7 +6,9 @@
       </template>
       <template v-else>
         <form-render-item
-          v-bind="{ item, values, index }"
+          :index="index"
+          :values="value"
+          :item="item"
           v-if="item.type !== 'none'"
           :key="index"
         />
@@ -18,6 +20,7 @@
 import { item } from "~/types/form";
 import { useUserStore } from "~/store/user";
 import { defineComponent, PropType } from "@nuxtjs/composition-api";
+import { isUnique } from "~/composables/extravalidations";
 export default defineComponent({
   props: {
     items: {
@@ -33,33 +36,38 @@ export default defineComponent({
       required: true,
       defaultValue: false,
     },
+    values: {
+      type: Array,
+      required: true,
+    },
   },
   async mounted() {
-    this.valuesReset = await this.structure();
-    this.values = await this.structure();
+    this.value = await this.structure();
     if (this.edit) {
       this.setValues(this.data);
     }
   },
   data() {
     return {
-      values: {},
-      valuesReset: {},
+      value: {} as any,
     };
   },
   computed: {
-    validate() {
+    validate(): any {
       var rule = {} as any;
       this.items.forEach((item) => {
         if (item.type !== "none") {
           if (item.type !== "divide") {
             if (item.validate != undefined) {
-              if (this.edit == true) {
-                if (item.validate["isUnique"] !== undefined) {
-                  delete item.validate["isUnique"];
+              if (this.edit != true) {
+                if (item?.unique == true) {
+                  item.validate.validation.unique = isUnique(
+                    this.values,
+                    item.name
+                  );
                 }
               }
-              rule[item.name] = item.validate;
+              rule[item.name] = item.validate.validation;
             }
           }
         }
@@ -69,7 +77,7 @@ export default defineComponent({
   },
   validations() {
     return {
-      values: this.validate,
+      value: this.validate,
     };
   },
   methods: {
@@ -94,12 +102,12 @@ export default defineComponent({
       return this.$v.$invalid;
     },
     getValues() {
-      return this.values;
+      return this.value;
     },
     setValues(value: any) {
       this.items.forEach((item) => {
         if (item.type !== "divide" && item.type !== "none") {
-          this.values[item.name] = value[item.name];
+          this.value[item.name] = value[item.name];
         }
       });
     },

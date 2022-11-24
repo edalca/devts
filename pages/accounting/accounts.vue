@@ -8,6 +8,7 @@ import { required, helpers, requiredIf } from "vuelidate/lib/validators";
 import { form } from "~/types/form";
 import { defineComponent, useRoute, onMounted } from "@nuxtjs/composition-api";
 import { useES } from "~/composables/es";
+import { validationMessage } from "vuelidate-messages";
 const options = [
   {
     name: "Activos",
@@ -61,13 +62,23 @@ export default defineComponent({
           type: "text",
           table: true,
           label: "No. Cuenta",
+          unique: true,
           class: "field col-4",
           defaultValue: "",
           value: (values) => {
             return values.accountNumber;
           },
           validate: {
-            required,
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+                unique: () => "El numero de cuenta ya existe",
+              },
+              {}
+            ),
           },
         },
         {
@@ -81,7 +92,15 @@ export default defineComponent({
             return values.accountName;
           },
           validate: {
-            required,
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
           },
         },
         {
@@ -112,7 +131,15 @@ export default defineComponent({
             values: options,
           },
           validate: {
-            required,
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
           },
         },
         {
@@ -135,10 +162,18 @@ export default defineComponent({
             return values.isgroup;
           },
           validate: {
-            required: requiredIf((values) => {
-              if (values.isgroup == false) return true;
-              else return false;
-            }),
+            validation: {
+              required: requiredIf((values) => {
+                if (values.isgroup == false) return true;
+                else return false;
+              }),
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
           },
         },
         {

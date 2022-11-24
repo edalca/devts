@@ -11,7 +11,13 @@
       <template #header>
         <h2>{{ edit ? conf.titleEdit : conf.titleNew }}</h2>
       </template>
-      <form-render ref="form" :items="items" :data="data" :edit="edit" />
+      <form-render
+        ref="form"
+        :items="items"
+        :data="data"
+        :edit="edit"
+        :values="values"
+      />
       <template #footer>
         <Button
           label="Guardar"
@@ -52,6 +58,10 @@ export default defineComponent({
     },
     fetch: {
       type: Object as PropType<fetch>,
+      required: true,
+    },
+    values: {
+      type: Array,
       required: true,
     },
   },

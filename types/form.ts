@@ -35,19 +35,43 @@ export interface conf {
   delRegister: boolean;
 }
 
-interface input {
+interface inputText {
   name: string;
-  type: "text" | "textArea" | "number" | "date";
+  type: "text" | "textArea" | "date";
   label: string;
   table: boolean;
   class: string;
   bind?: any;
-  defaultValue: string | number;
+  unique?: boolean,
+  upperCase?: boolean,
+  defaultValue: string;
   value: (values: any) => any;
   hidden?: (values: any) => boolean;
   on?: (values: any) => any;
-  validate?: any;
+  validate?: {
+    validation: any,
+    messages: any
+  }
 }
+
+interface inputNumber {
+  name: string;
+  type: "number";
+  label: string;
+  table: boolean;
+  class: string;
+  bind?: any;
+  unique?: boolean,
+  defaultValue: number;
+  value: (values: any) => any;
+  hidden?: (values: any) => boolean;
+  on?: (values: any) => any;
+  validate?: {
+    validation: any,
+    messages: any
+  }
+}
+
 interface none {
   name: string;
   type: "none";
@@ -62,32 +86,35 @@ interface select {
   table: boolean;
   class: string;
   options:
-    | {
-        type: "remote";
-        url: string;
-        params: object;
-        label: string;
-        sublabel?: string;
-        grouplabel?: string;
-        groupchildren?: [];
-        value?: any;
-      }
-    | {
-        type: "static";
-        values: any;
-        label: string;
-        sublabel?: string;
-        value?: any;
-        grouplabel?: string;
-        groupchildren?: [];
-      };
+  | {
+    type: "remote";
+    url: string;
+    params: object;
+    label: string;
+    sublabel?: string;
+    grouplabel?: string;
+    groupchildren?: [];
+    value?: any;
+  }
+  | {
+    type: "static";
+    values: any;
+    label: string;
+    sublabel?: string;
+    value?: any;
+    grouplabel?: string;
+    groupchildren?: [];
+  };
   bind?: any;
   small?: string;
   defaultValue: null | Array<Object | string> | string | number;
   value: (values: any) => any;
   hidden?: (values: any) => boolean;
   on?: (values: any) => any;
-  validate?: any;
+  validate?: {
+    validation: any,
+    messages: any
+  }
 }
 interface check {
   name: string;
@@ -99,7 +126,10 @@ interface check {
   on?: (values: any) => any;
   defaultValue: boolean;
   value: (values: any) => any;
-  validate?: any;
+  validate?: {
+    validation: any,
+    messages: any
+  }
 }
 
 interface option {
@@ -116,7 +146,10 @@ interface option {
     value: string;
     hidden?: (values: any) => boolean;
   }>;
-  validate?: any;
+  validate?: {
+    validation: any,
+    messages: any
+  }
 }
 interface datatable {
   name: string;
@@ -129,11 +162,14 @@ interface datatable {
     value: string;
     hidden?: (values: any) => boolean;
   }>;
-  validate?: any;
+  validate?: {
+    validation: any,
+    messages: any
+  }
 }
 interface divide {
   type: "divide";
 }
 
-export type item = input | select | option | check | datatable | divide | none;
-export type items = input | select | option | check | datatable;
+export type item = inputText | inputNumber | select | option | check | datatable | divide | none;
+export type items = inputText | inputNumber | select | option | check | datatable;
