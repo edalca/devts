@@ -43,12 +43,7 @@ import modules from "../content/modules";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import Toast from "primevue/toast";
-import {
-  defineComponent,
-  ref,
-  computed,
-  useRouter,
-} from "@nuxtjs/composition-api";
+import { defineComponent, ref, computed } from "@nuxtjs/composition-api";
 export default defineComponent({
   middleware: "auth",
   components: {
@@ -56,20 +51,31 @@ export default defineComponent({
     Menu,
     Toast,
   },
+  methods: {
+    logOff() {
+      const userStore = useUserStore();
+      userStore.logOff();
+      this.$router.push("/login");
+    },
+  },
+  data() {
+    return {
+      userOptions: [
+        {
+          label: "Cerrar Sesion",
+          icon: "pi pi-sign-out",
+          command: () => {
+            this.logOff();
+          },
+        },
+      ],
+    };
+  },
   setup() {
     const username = useUserStore().getUsername;
     const menuClick = ref(false);
     const menu = ref();
     const items = ref(modules);
-    const userOptions = [
-      {
-        label: "Cerrar Sesion",
-        icon: "pi pi-sign-out",
-        command: () => {
-          logOff();
-        },
-      },
-    ];
     const layoutMode = ref("static");
     const staticMenuInactive = ref(false);
     const overlayMenuActive = ref(false);
@@ -127,11 +133,7 @@ export default defineComponent({
     const onSidebarClick = () => {
       menuClick.value = true;
     };
-    const logOff = () => {
-      const userStore = useUserStore();
-      userStore.logOff();
-      useRouter().push("/login");
-    };
+
     return {
       containerClass,
       onWrapperClick,
@@ -141,7 +143,6 @@ export default defineComponent({
       items,
       menu,
       onSidebarClick,
-      userOptions,
       username,
     };
   },

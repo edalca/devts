@@ -25,7 +25,8 @@
     "vue": "^2.7.14",
     "vue-server-renderer": "^2.7.14",
     "vue-template-compiler": "^2.7.14",
-    "vuelidate": "^0.7.7"
+    "vuelidate": "^0.7.7",
+    "vuelidate-messages": "^0.1.2"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.8",

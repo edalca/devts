@@ -8366,6 +8366,11 @@ vue@^2.6.11, vue@^2.6.12, vue@^2.7.14:
     "@vue/compiler-sfc" "2.7.14"
     csstype "^3.1.0"
 
+vuelidate-messages@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vuelidate-messages/-/vuelidate-messages-0.1.2.tgz#65b6fa2a17e8bf0c18ec2425b7a5e9295986fe87"
+  integrity sha512-LPEYOcvKnA6jivWe8shq0uEDE9SuFotG7GgN7/Jtg+RbfivEwptUONGh4L+Wo4vjdepXdPhCI7hnuezQCgyvmw==
+
 vuelidate@^0.7.7:
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/vuelidate/-/vuelidate-0.7.7.tgz#5df3930a63ddecf56fde7bdacea9dbaf0c9bf899"

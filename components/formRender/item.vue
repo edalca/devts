@@ -8,11 +8,12 @@
         v-bind="item.bind"
         :tabindex="index.toString()"
         v-on="eventItem()"
+        v-tooltip="{ value: 'Enter your username', disabled: false }"
         :class="{
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate, v }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'textArea'">
       <form-render-label v-bind="{ item }" />
@@ -26,7 +27,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate, v }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'number'">
       <form-render-label v-bind="{ item }" />
@@ -40,7 +41,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate, v }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'date'">
       <form-render-label v-bind="{ item }" />
@@ -56,7 +57,7 @@
           'p-invalid': validate,
         }"
       />
-      <form-render-error-message v-bind="{ item, validate, v }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'select'">
       <form-render-label v-bind="{ item }" />
@@ -74,7 +75,7 @@
         :options="options"
       >
       </Dropdown>
-      <form-render-error-message v-bind="{ item, validate, v }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'cascade'">
       <form-render-label v-bind="{ item }" />
@@ -92,7 +93,7 @@
         :optionGroupLabel="item.options.grouplabel"
         :optionGroupChildren="item.options.groupchildren"
       />
-      <form-render-error-message v-bind="{ item, validate, v }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
     <template v-else-if="item.type == 'checkbox'">
       <Checkbox
@@ -107,7 +108,7 @@
         :key="'chk-' + index.toString()"
       />
       <form-render-label v-bind="{ item }" />
-      <form-render-error-message v-bind="{ item, validate, v }" />
+      <form-render-error-message v-bind="{ item, validate }" />
     </template>
   </div>
 </template>
@@ -148,10 +149,6 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    v: {
-      type: Object as any,
-      required: true,
-    },
   },
   data() {
     return {
@@ -161,7 +158,7 @@ export default defineComponent({
   computed: {
     validate(): boolean {
       if (this.item.validate !== undefined) {
-        return this.v.values[this.item.name].$error;
+        return this.$parent.$v.values[this.item.name].$error;
       }
       return false;
     },

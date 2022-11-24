@@ -6,7 +6,7 @@
       </template>
       <template v-else>
         <form-render-item
-          v-bind="{ item, values, index, v: $v }"
+          v-bind="{ item, values, index }"
           v-if="item.type !== 'none'"
           :key="index"
         />
@@ -28,16 +28,23 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    edit: {
+      type: Boolean,
+      required: true,
+      defaultValue: false,
+    },
   },
   async mounted() {
     this.valuesReset = await this.structure();
     this.values = await this.structure();
+    if (this.edit) {
+      this.setValues(this.data);
+    }
   },
   data() {
     return {
       values: {},
       valuesReset: {},
-      edit: false,
     };
   },
   computed: {
@@ -80,28 +87,21 @@ export default defineComponent({
         else if (item.type == "datatable") values[item.name] = [];
       });
       values["companies_id"] = useUserStore().getCompany;
-      console.log(values);
       return values;
     },
     async getValidation() {
-      this.$v.$touch();
+      await this.$v.$touch();
       return this.$v.$invalid;
     },
     getValues() {
-      console.log(this.values);
       return this.values;
     },
     setValues(value: any) {
       this.items.forEach((item) => {
-        if (item.type !== "divide") {
-          if (item.type !== "none") this.values[item.name] = value[item.name];
+        if (item.type !== "divide" && item.type !== "none") {
+          this.values[item.name] = value[item.name];
         }
       });
-      this.edit = true;
-    },
-    resetValues() {
-      this.$v.$reset();
-      this.values = this.valuesReset;
     },
   },
 });

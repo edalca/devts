@@ -12,7 +12,6 @@ export default [
   {
     label: "Contabilidad",
     items: [
-
       {
         label: "Plan de Cuentas",
         to: "/accounting/accounts",
@@ -23,8 +22,10 @@ export default [
         to: "/accounting/costcenters",
         icon: "bi bi-journal-bookmark",
       },
-
+      {
+        label: "Libros Contables",
+        to: "/accounting/accountbooks",
+      },
     ],
-
   },
 ];

@@ -101,7 +101,7 @@ export default defineComponent({
           table: true,
           label: "Tipo de Cuenta",
           class: "field col-6",
-          defaultValue: null,
+          defaultValue: "A",
           value: (values: any) => {
             return options.find((item) => item.value == values.type)?.name;
           },
@@ -135,9 +135,19 @@ export default defineComponent({
             return values.isgroup;
           },
           validate: {
-            required: requiredIf((value) => {
-              return true;
+            required: requiredIf((values) => {
+              if (values.isgroup == false) return true;
+              else return false;
             }),
+          },
+        },
+        {
+          name: "balance",
+          label: "Balance",
+          table: true,
+          type: "none",
+          value: (values) => {
+            return values.balance;
           },
         },
       ],

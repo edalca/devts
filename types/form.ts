@@ -18,8 +18,8 @@ interface breadcrumb {
 }
 
 interface exports {
-  pdf?: boolean;
-  xsl?: boolean;
+  pdf: boolean;
+  xsl: boolean;
 }
 interface imports {
   url: string;
@@ -37,7 +37,7 @@ export interface conf {
 
 interface input {
   name: string;
-  type: "text" | "textArea" | "number" | "date" | "none";
+  type: "text" | "textArea" | "number" | "date";
   label: string;
   table: boolean;
   class: string;
@@ -48,6 +48,13 @@ interface input {
   on?: (values: any) => any;
   validate?: any;
 }
+interface none {
+  name: string;
+  type: "none";
+  label: string;
+  table: boolean;
+  value: (values: any) => any;
+}
 interface select {
   name: string;
   type: "select" | "cascade";
@@ -55,28 +62,28 @@ interface select {
   table: boolean;
   class: string;
   options:
-  | {
-    type: "remote";
-    url: string;
-    params: object;
-    label: string;
-    sublabel?: string;
-    grouplabel?: string;
-    groupchildren?: [];
-    value?: any;
-  }
-  | {
-    type: "static";
-    values: any;
-    label: string;
-    sublabel?: string;
-    value?: any;
-    grouplabel?: string;
-    groupchildren?: [];
-  };
+    | {
+        type: "remote";
+        url: string;
+        params: object;
+        label: string;
+        sublabel?: string;
+        grouplabel?: string;
+        groupchildren?: [];
+        value?: any;
+      }
+    | {
+        type: "static";
+        values: any;
+        label: string;
+        sublabel?: string;
+        value?: any;
+        grouplabel?: string;
+        groupchildren?: [];
+      };
   bind?: any;
   small?: string;
-  defaultValue: null | Array<Object | string>;
+  defaultValue: null | Array<Object | string> | string | number;
   value: (values: any) => any;
   hidden?: (values: any) => boolean;
   on?: (values: any) => any;
@@ -128,5 +135,5 @@ interface divide {
   type: "divide";
 }
 
-export type item = input | select | option | check | datatable | divide;
+export type item = input | select | option | check | datatable | divide | none;
 export type items = input | select | option | check | datatable;

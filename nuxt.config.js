@@ -20,7 +20,7 @@ export default {
     "primeflex/primeflex.css",
     "@/assets/css/index.scss",
     "@/assets/css/sakai-vue/layout.scss",
-    "bootstrap-icons/font/bootstrap-icons.css"
+    "bootstrap-icons/font/bootstrap-icons.css",
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -50,11 +50,10 @@ export default {
       {
         theme: "bootstrap4-light-blue",
         ripple: true,
-        directives: ["Tooltip", "Badge"],
       },
     ],
     "@nuxtjs/axios",
-    "@nuxtjs/moment"
+    "@nuxtjs/moment",
   ],
   axios: {
     baseURL: "http://74.208.181.80:8444", // Used as fallback if no runtime config is provided

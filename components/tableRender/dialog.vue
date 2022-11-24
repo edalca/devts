@@ -11,7 +11,7 @@
       <template #header>
         <h2>{{ edit ? conf.titleEdit : conf.titleNew }}</h2>
       </template>
-      <form-render ref="form" :items="items" :data="data" />
+      <form-render ref="form" :items="items" :data="data" :edit="edit" />
       <template #footer>
         <Button
           label="Guardar"
@@ -30,7 +30,6 @@
   </div>
 </template>
 <script lang="ts">
-import { VForm } from "~/types/render";
 import Dialog from "primevue/dialog";
 import { conf, item, fetch } from "~/types/form";
 import Button from "primevue/button";
@@ -66,31 +65,27 @@ export default defineComponent({
   },
   methods: {
     showDialog(value: boolean) {
-      const form = this.$refs.form as VForm;
       if (!value) {
         this.editID = 0;
         this.edit = false;
         this.data = {};
-        form.resetValues();
       }
       this.display = value;
     },
     editForm(values: any) {
-      this.data = values;
-      this.showDialog(true);
       this.editID = values.id;
       this.edit = true;
+      this.data = values;
+      this.showDialog(true);
     },
 
     async save() {
-      const form = this.$refs.form as VForm;
-      const data = await form.getValues();
-      const valid = true;
-      await form.getValidation();
+      const data = await this.$refs.form.getValues();
+      const valid = await this.$refs.form.getValidation();
       if (!valid) {
         if (!this.edit) {
           await this.$axios
-            .post(this.fetch.url, form.getValues())
+            .post(this.fetch.url, data)
             .then((res) => {
               this.$toast.add({
                 severity: res.data.status ? "success" : "error",
@@ -104,7 +99,7 @@ export default defineComponent({
             });
         } else {
           await this.$axios
-            .put(this.fetch.url + "/" + this.editID, form.getValues())
+            .put(this.fetch.url + "/" + this.editID, data)
             .then((res) => {
               this.$toast.add({
                 severity: res.data.status ? "success" : "error",
@@ -117,7 +112,7 @@ export default defineComponent({
               this.errorMessages(err);
             });
         }
-        this.$emit("show");
+        this.$parent.show();
         this.showDialog(false);
       }
     },

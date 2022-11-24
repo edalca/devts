@@ -74,7 +74,7 @@
             </template>
           </Column>
         </template>
-        <Column header="Optiones" :styles="{ 'max-width': '150px' }">
+        <Column header="Opciones" :styles="{ 'max-width': '150px' }">
           <template #body="slot">
             <Button
               v-if="config.editRegister"

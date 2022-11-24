@@ -16,10 +16,6 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
-    v: {
-      type: Object as any,
-      required: true,
-    },
   },
   computed: {
     messages() {},
