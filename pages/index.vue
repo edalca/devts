@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <p>{{ "HOLA" }}</p>
-  </div>
+  <div></div>
 </template>
-
 <script lang="ts">
 import Vue, { reactive, computed } from "vue";
 export default Vue.extend({

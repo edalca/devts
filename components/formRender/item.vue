@@ -194,9 +194,13 @@ export default defineComponent({
           this.options = this.item.options.values;
         }
         if (this.item.options.type == "remote") {
-          await this.$axios.get(this.item.options.url).then((resp) => {
-            this.options = resp.data;
-          });
+          await this.$axios
+            .get(this.item.options.url, {
+              params: this.item.options?.params ?? {},
+            })
+            .then((resp) => {
+              this.options = resp.data;
+            });
         }
       }
     },

@@ -2,6 +2,7 @@ import { NuxtAxiosInstance } from "@nuxtjs/axios";
 export const isUnique =
   (values: any, element: string) =>
     async (value: any) => {
+      if (values == undefined) return true
       const data = values.find((items: any) => items[element] == value);
       if (data == undefined || data == null) return true;
       if (Object.keys(data).length > 0) return false;

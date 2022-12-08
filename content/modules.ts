@@ -15,17 +15,27 @@ export default [
       {
         label: "Plan de Cuentas",
         to: "/accounting/accounts",
-        icon: "bi bi-journal-text",
+        icon: "pi pi-circle",
       },
       {
         label: "Centros de Costos",
         to: "/accounting/costcenters",
-        icon: "bi bi-journal-bookmark",
+        icon: "pi pi-circle",
       },
       {
         label: "Libros Contables",
         to: "/accounting/accountbooks",
+        icon: "pi pi-circle"
       },
     ],
   },
+  {
+    label: "Inventario",
+    items: [{
+      label: "Productos",
+      icon: "pi pi-circle",
+      to: "/inventories/products",
+    }]
+
+  }
 ];
