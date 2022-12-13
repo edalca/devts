@@ -110,12 +110,13 @@ import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import ConfirmDialog from "primevue/confirmdialog";
-
+import { usePageStore } from "~/store/page";
 import {
   onMounted,
   ref,
   defineComponent,
   useContext,
+  useRouter,
 } from "@nuxtjs/composition-api";
 
 export default defineComponent({
@@ -191,10 +192,36 @@ export default defineComponent({
       loading.value = false;
     };
     const newRegister = () => {
-      dialogRender.value.showDialog(true);
+      if (form.pageForm) {
+        const router = useRouter();
+        const pageStore = usePageStore();
+        pageStore.page({}, form);
+        router.push({
+          name: "page-id",
+          params: {
+            page: "register",
+            id: "new",
+          },
+        });
+      } else {
+        dialogRender.value.showDialog(true);
+      }
     };
     const edit = async (values: any) => {
-      dialogRender.value.editForm(values);
+      if (form.pageForm) {
+        const router = useRouter();
+        const pageStore = usePageStore();
+        pageStore.page(values, form);
+        router.push({
+          name: "page-id",
+          params: {
+            page: "register",
+            id: "new",
+          },
+        });
+      } else {
+        dialogRender.value.editForm(values);
+      }
     };
 
     return {

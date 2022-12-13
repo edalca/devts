@@ -225,6 +225,39 @@ export default defineComponent({
             ),
           },
         },
+        {
+          name: "accounts_cost_id",
+          label: "Cuenta Costo",
+          type: "select",
+          class: "field col-6",
+          defaultValue: null,
+          table: true,
+          value: (prop) => {
+            return prop.account.accountNumber;
+          },
+          bind: {
+            optionLabel: "accountNumber",
+            optionValue: "id",
+            small: "accountName",
+          },
+          options: {
+            type: "remote",
+            label: "accountNumber",
+            url: "accounting/accounts/filter",
+            params: { code: "CDV,GDV" },
+          },
+          validate: {
+            validation: {
+              required,
+            },
+            messages: validationMessage(
+              {
+                required: () => "El dato es requerido",
+              },
+              {}
+            ),
+          },
+        },
       ],
     };
     return {

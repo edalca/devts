@@ -84,13 +84,11 @@ export default defineComponent({
     async structure() {
       const values = {} as any;
       this.items.forEach((item) => {
-        if (item.type == "text") values[item.name] = item.defaultValue;
-        else if (item.type == "textArea") values[item.name] = item.defaultValue;
-        else if (item.type == "number") values[item.name] = item.defaultValue;
-        else if (item.type == "select") values[item.name] = item.defaultValue;
-        else if (item.type == "date") values[item.name] = item.defaultValue;
-        else if (item.type == "checkbox") values[item.name] = item.defaultValue;
-        else if (item.type == "radiobutton")
+        if (
+          item.type !== "none" &&
+          item.type !== "divide" &&
+          item.type !== "datatable"
+        )
           values[item.name] = item.defaultValue;
         else if (item.type == "datatable") values[item.name] = [];
       });
