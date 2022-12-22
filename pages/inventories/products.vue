@@ -18,7 +18,7 @@ export default defineComponent({
       fetch: {
         url: "inventories/products",
       },
-      pageForm: false,
+      pageForm: true,
       breadcrumbs: useES(useRoute().value.name ?? ""),
       config: {
         titleNew: "Registro de Producto",

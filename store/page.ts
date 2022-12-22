@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export const usePageStore = defineStore("page", {
     state: () => ({
-        data: {},
+        data: {} as any,
         structure: {}
     }),
     actions: {

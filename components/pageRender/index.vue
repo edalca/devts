@@ -4,7 +4,7 @@
       <div class="page-head p-d-flex p-jc-between">
         <div class="p-d-flex">
           <h3 style="font-weight: bold">
-            {{ config.title }}
+            {{ edit ? conf.titleEdit : conf.titleNew }}
           </h3>
         </div>
         <div>
@@ -25,17 +25,23 @@
     <Card style="margin: 1em 2em 0 2em">
       <template #title> </template>
       <template #content>
-        <form-render v-bind="{ items }" ref="form" />
+        <form-render
+          :items="items"
+          :data="data"
+          :edit="edit"
+          :values="values"
+          ref="form"
+        />
       </template>
     </Card>
 
-    <Confirmdialog></Confirmdialog>
+    <ConfirmDialog />
   </div>
 </template>
 
 <script lang="ts">
 import { usePageStore } from "~/store/page";
-import _ from "lodash";
+import * as _ from "lodash";
 import { item, conf, fetch } from "~/types/form";
 import errorMessage from "~/mixins/errorMessages";
 import { PropType, defineComponent, ref } from "@nuxtjs/composition-api";
@@ -69,7 +75,7 @@ export default defineComponent({
   },
   data() {
     return {
-      data: [],
+      data: {},
       filters: {},
       display: false,
       edit: false,
@@ -80,21 +86,23 @@ export default defineComponent({
     editForm() {
       const pageStore = usePageStore();
       this.data = _.cloneDeep(pageStore.data);
-      this.editID = pageStore.data.id;
+      this.editID = pageStore.data?.id ?? 0;
       this.edit = true;
       this.$refs.form.setValues(this.data);
     },
     async save() {
+      const data = await this.$refs.form.getValues();
+      const valid = await this.$refs.form.getValidation();
       var validSave = true;
-      if (await this.$refs.form.getValidation()) {
+      if (!valid) {
         if (!this.edit) {
           await this.$axios
-            .post(this.url, this.$refs.form.getValues())
+            .post(this.url, data)
             .then((res) => {
               validSave = res.data.status;
               this.$toast.add({
                 severity: res.data.status ? "success" : "error",
-                summary: this.config.summary,
+                summary: "Mensaje de Sistema",
                 detail: res.data.message,
                 life: 3000,
               });
@@ -104,12 +112,12 @@ export default defineComponent({
             });
         } else {
           await this.$axios
-            .put(this.url + "/" + this.editID, this.$refs.form.getValues())
+            .put(this.url + "/" + this.editID, data)
             .then((res) => {
               validSave = res.data.status;
               this.$toast.add({
                 severity: res.data.status ? "success" : "error",
-                summary: this.config.summary,
+                summary: "Mensaje de Sistema",
                 detail: res.data.message,
                 life: 3000,
               });

@@ -163,7 +163,7 @@ export default defineComponent({
   },
   setup({ form }) {
     const { $axios, $moment } = useContext();
-
+    const router = useRouter();
     onMounted(() => {
       innerHeight.value = window.innerHeight;
       tableHeight.value = innerHeight.value * 0.8;
@@ -193,7 +193,6 @@ export default defineComponent({
     };
     const newRegister = () => {
       if (form.pageForm) {
-        const router = useRouter();
         const pageStore = usePageStore();
         pageStore.page({}, form);
         router.push({

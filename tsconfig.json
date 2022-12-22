@@ -28,7 +28,8 @@
       "@types/node",
       "@nuxtjs/axios",
       "@types/vuelidate",
-      "@nuxtjs/moment"
+      "@nuxtjs/moment",
+      "@types/lodash"
     ]
   },
   "exclude": [

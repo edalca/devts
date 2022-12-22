@@ -37,7 +37,7 @@ export default defineComponent({
       defaultValue: false,
     },
     values: {
-      type: Array,
+      type: Array as any,
       required: true,
     },
   },

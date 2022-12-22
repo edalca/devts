@@ -44,7 +44,7 @@ export default defineComponent({
       fetch: {
         url: "/accounting/accounts",
       },
-      pageForm: false,
+      pageForm: true,
       breadcrumbs: useES(useRoute().value.name ?? ""),
       config: {
         titleNew: "Registro de Cuenta",
