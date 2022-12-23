@@ -169,6 +169,7 @@ interface datatable {
 }
 interface divide {
   type: "divide";
+  class:string
 }
 
 export type item = inputText | inputNumber | select | option | check | datatable | divide | none;

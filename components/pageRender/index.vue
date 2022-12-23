@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div style="margin: 1em 2.5em 0 2.5em">
-      <div class="page-head p-d-flex p-jc-between">
+    <div style="margin: 2em 2.5em 0 2.5em">
+      <div class="page-head flex justify-content-between">
         <div class="p-d-flex">
           <h3 style="font-weight: bold">
             {{ edit ? conf.titleEdit : conf.titleNew }}
@@ -9,13 +9,13 @@
         </div>
         <div>
           <Button
-            class="p-button-sm p-button-raised p-button-success"
+            class="p-button-raised p-button p-button-sm ml-1"
             label="Guardar"
             @click="save()"
           />
 
           <Button
-            class="p-button-danger p-button-sm p-button-raised"
+            class="p-button-secondary p-button-raised p-button-text p-button-sm"
             label="Cancelar"
             @click="cancelForm"
           />

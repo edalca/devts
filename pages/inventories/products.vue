@@ -37,7 +37,7 @@ export default defineComponent({
           table: true,
           label: "Codigo",
           defaultValue: "",
-          class: "field col-2",
+          class: "field col-6",
           value: (props) => {
             return props.code;
           },
@@ -59,7 +59,7 @@ export default defineComponent({
           table: true,
           defaultValue: "",
           label: "Nombre del Producto",
-          class: "field col-10",
+          class: "field col-6",
           value: (props) => {
             return props.name;
           },
@@ -140,7 +140,7 @@ export default defineComponent({
             return props.amount;
           },
           label: "Cantidad",
-          class: "field col-4",
+          class: "field col-2",
           validate: {
             validation: {
               required,
@@ -162,7 +162,7 @@ export default defineComponent({
             return props.price;
           },
           label: "Precio",
-          class: "field col-4",
+          class: "field col-2",
           validate: {
             validation: {
               required,
@@ -184,7 +184,7 @@ export default defineComponent({
             return props.price;
           },
           label: "Costo",
-          class: "field col-4",
+          class: "field col-2",
           validate: {
             validation: {
               required,
@@ -196,6 +196,10 @@ export default defineComponent({
               {}
             ),
           },
+        },
+        {
+          type:"divide",
+          class:"col-6"
         },
         {
           name: "accounts_inventory_id",

@@ -2,7 +2,7 @@
   <div class="p-fluid grid">
     <template v-for="(item, index) in items">
       <template v-if="item.type == 'divide'">
-        <div class="col-12" :key="index"></div>
+        <div :class="item.class" :key="index"></div>
       </template>
       <template v-else>
         <form-render-item
